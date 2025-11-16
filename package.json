@@ -1,6 +1,6 @@
 {
   "name": "pullmate",
-  "version": "1.2.0",
+  "version": "1.0.0",
   "description": "🚀 Automated Git repository management tool with scheduling, notifications, and cross-platform support",
   "main": "src/cli.js",
   "type": "module",
@@ -48,18 +48,18 @@
   ],
   "author": {
     "name": "Raj Shah",
-    "email": "raj@example.com",
-    "url": "https://github.com/rajshah"
+    "email": "rajshah11112003@gmail.com",
+    "url": "https://github.com/Rajshah1103"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/grayquest-finance/pullmate.git"
+    "url": "git+https://github.com/Rajshah1103/PullMate.git"
   },
   "bugs": {
-    "url": "https://github.com/grayquest-finance/pullmate/issues"
+    "url": "https://github.com/Rajshah1103/PullMate/issues"
   },
-  "homepage": "https://github.com/grayquest-finance/pullmate#readme",
+  "homepage": "https://github.com/Rajshah1103/PullMate#readme",
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=7.0.0"
@@ -92,6 +92,6 @@
   ],
   "funding": {
     "type": "github",
-    "url": "https://github.com/sponsors/rajshah"
+    "url": "https://github.com/sponsors/Rajshah1103"
   }
 }
