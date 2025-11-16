@@ -336,7 +336,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📊 Changelog
 
-### v1.0.2 (Latest)
+### v1.0.3 (Latest)
+- 📊 **Badge improvements**: Updated npm version badge to use shields.io for faster updates
+- 🔧 **Documentation**: Better badge caching and reliability
+
+### v1.0.2
 - ⚡ **Performance optimization**: 50% reduction in git network calls
 - 🔧 **Improved git operations**: Eliminated redundant fetching with fetch + merge approach
 - 📊 **Better logging**: Separate FETCH and MERGE outputs for clearer debugging
