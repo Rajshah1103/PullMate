@@ -103,3 +103,6 @@ yarn-error.log*
 # Build artifacts
 build/
 dist/
+
+# Development scripts
+scripts/
