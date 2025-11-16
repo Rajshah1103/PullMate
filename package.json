@@ -1,0 +1,97 @@
+{
+  "name": "pullmate",
+  "version": "1.0.0",
+  "description": "🚀 Automated Git repository management tool with scheduling, notifications, and cross-platform support",
+  "main": "src/cli.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/cli.js",
+    "dev": "NODE_ENV=development node src/cli.js",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "node --test scripts/test-unit.js",
+    "test:integration": "node --test scripts/test-integration.js",
+    "test:coverage": "c8 npm run test",
+    "build": "echo 'No build step required for Node.js CLI'",
+    "lint": "eslint src/ --ext .js",
+    "lint:fix": "eslint src/ --ext .js --fix",
+    "format": "prettier --write src/",
+    "docker:build": "docker build -t pullmate .",
+    "docker:run": "docker run -v ~/.pullmaterc.json:/root/.pullmaterc.json -v ~/.pullmate:/root/.pullmate pullmate",
+    "clean": "rm -rf node_modules .pullmate-test",
+    "prepare": "husky install || true",
+    "prepublishOnly": "node scripts/pre-publish.js",
+    "version:patch": "npm version patch && git push origin main --tags",
+    "version:minor": "npm version minor && git push origin main --tags",
+    "version:major": "npm version major && git push origin main --tags",
+    "publish:patch": "npm run prepublishOnly && npm version patch && npm publish && git push origin main --tags",
+    "publish:minor": "npm run prepublishOnly && npm version minor && npm publish && git push origin main --tags",
+    "publish:major": "npm run prepublishOnly && npm version major && npm publish && git push origin main --tags",
+    "publish:beta": "npm run prepublishOnly && npm version prerelease --preid=beta && npm publish --tag beta && git push origin main --tags"
+  },
+  "bin": {
+    "pullmate": "bin/index.js"
+  },
+  "keywords": [
+    "git",
+    "automation",
+    "pull",
+    "repository",
+    "scheduler",
+    "cli",
+    "devtools",
+    "productivity",
+    "multi-platform",
+    "sync",
+    "startup",
+    "cron",
+    "task-scheduler"
+  ],
+  "author": {
+    "name": "Raj Shah",
+    "email": "rajshah11112003@gmail.com",
+    "url": "https://github.com/Rajshah1103"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rajshah1103/PullMate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Rajshah1103/PullMate/issues"
+  },
+  "homepage": "https://github.com/Rajshah1103/PullMate#readme",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  },
+  "dependencies": {
+    "commander": "^12.0.0",
+    "node-notifier": "^10.0.1",
+    "open": "^10.2.0",
+    "winston": "^3.18.3"
+  },
+  "devDependencies": {
+    "c8": "^8.0.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-node": "^11.1.0",
+    "husky": "^8.0.3",
+    "prettier": "^3.0.0"
+  },
+  "files": [
+    "src/",
+    "bin/",
+    "README.md",
+    "LICENSE"
+  ],
+  "preferGlobal": true,
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/Rajshah1103"
+  }
+}
