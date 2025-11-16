@@ -85,20 +85,20 @@ export function pullRepo(repoPath) {
     };
   }
 
-  // Fetch from origin only (safer and more targeted)
-  const fetchResult = runGitCommand(fullPath, "git fetch origin");
+  // Fetch all branches and tags from origin to avoid stale code across the entire repo
+  const fetchResult = runGitCommand(fullPath, "git fetch origin --all --tags --prune");
   
-  // Attempt pull with fast-forward only to avoid merge commits
-  const pullResult = runGitCommand(fullPath, `git pull --ff-only origin ${branch}`);
+  // Merge current branch only (no redundant fetch) with fast-forward only to avoid merge commits
+  const mergeResult = runGitCommand(fullPath, `git merge --ff-only origin/${branch}`);
 
   let status = "🔄 up-to-date";
-  let message = pullResult;
+  let message = mergeResult;
   let detailedMessage = "";
 
-  if (pullResult && pullResult.error) {
+  if (mergeResult && mergeResult.error) {
     status = "❌ failed";
-    message = pullResult.error;
-    detailedMessage = `FETCH: ${fetchResult || 'N/A'}\nPULL ERROR: ${pullResult.error}`;
+    message = mergeResult.error;
+    detailedMessage = `FETCH: ${fetchResult || 'N/A'}\nMERGE ERROR: ${mergeResult.error}`;
 
     if (message.includes("Not possible to fast-forward") || 
         message.includes("divergent branches") ||
@@ -111,7 +111,7 @@ export function pullRepo(repoPath) {
     } else {
       notifier.notify({ title: "PullMate Error", message: `${repoName}: ${message}` });
     }
-  } else if (pullResult) {
+  } else if (mergeResult) {
     // Check for various "up to date" messages that git might output
     const upToDateMessages = [
       "Already up to date",
@@ -121,29 +121,29 @@ export function pullRepo(repoPath) {
     ];
     
     const isUpToDate = upToDateMessages.some(msg => 
-      pullResult.toLowerCase().includes(msg.toLowerCase())
+      mergeResult.toLowerCase().includes(msg.toLowerCase())
     );
     
     if (isUpToDate) {
       status = "✅ up-to-date";
-      detailedMessage = `FETCH: ${fetchResult || 'No updates from remote'}\nPULL: ${pullResult}`;
-    } else if (pullResult.includes("Fast-forward") || 
-               pullResult.includes("Updating") || 
-               pullResult.includes("files changed") ||
-               pullResult.includes("insertions") ||
-               pullResult.includes("deletions")) {
+      detailedMessage = `FETCH: ${fetchResult || 'No updates from remote'}\nMERGE: ${mergeResult}`;
+    } else if (mergeResult.includes("Fast-forward") || 
+               mergeResult.includes("Updating") || 
+               mergeResult.includes("files changed") ||
+               mergeResult.includes("insertions") ||
+               mergeResult.includes("deletions")) {
       status = "✅ updated";
-      detailedMessage = `FETCH: ${fetchResult || 'N/A'}\nPULL: ${pullResult}`;
+      detailedMessage = `FETCH: ${fetchResult || 'N/A'}\nMERGE: ${mergeResult}`;
       notifier.notify({ title: "PullMate", message: `${repoName}: Branch ${branch} updated` });
     } else {
       // Default to up-to-date for other cases
       status = "✅ up-to-date";
-      detailedMessage = `FETCH: ${fetchResult || 'No updates from remote'}\nPULL: ${pullResult}`;
+      detailedMessage = `FETCH: ${fetchResult || 'No updates from remote'}\nMERGE: ${mergeResult}`;
     }
   } else {
     // No output usually means up to date
     status = "✅ up-to-date";
-    detailedMessage = `FETCH: ${fetchResult || 'No updates from remote'}\nPULL: No output (likely up to date)`;
+    detailedMessage = `FETCH: ${fetchResult || 'No updates from remote'}\nMERGE: No output (likely up to date)`;
   }
 
   return {
@@ -154,6 +154,6 @@ export function pullRepo(repoPath) {
     message: detailedMessage || message,
     timestamp,
     fetchOutput: fetchResult || "",
-    pullOutput: pullResult || ""
+    mergeOutput: mergeResult || ""
   };
 }
