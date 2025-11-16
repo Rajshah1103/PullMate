@@ -1,0 +1,147 @@
+#!/usr/bin/env node
+import { initConfig, getConfig, editConfig } from "./configManager.js";
+import { pullRepo } from "./gitHandler.js";
+import { getLogger } from "./logger.js";
+import { Scheduler } from "./scheduler.js";
+import { StartupManager } from "./startupManager.js";
+import { ErrorHandler } from "./errorHandler.js";
+import os from "os";
+import fs from "fs";
+import path from "path";
+import { execSync } from "child_process";
+
+// ----------- Logger helper ------------
+function logMessage(message, logFilePath) {
+  try {
+    const logDir = path.dirname(logFilePath);
+    if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+    const time = new Date().toISOString();
+    fs.appendFileSync(logFilePath, `[${time}] ${message}\n`);
+  } catch (err) {
+    console.error("⚠️ Failed to write log:", err.message);
+  }
+}
+
+// Global instances
+let logger;
+let errorHandler;
+let scheduler;
+let startupManager;
+
+// Initialize modules
+function initializeModules(config) {
+  logger = getLogger(config.options.logFile);
+  errorHandler = new ErrorHandler(logger);
+  scheduler = new Scheduler(logger);
+  startupManager = new StartupManager(logger);
+}
+
+// ----------- Helper for startup registration ------------
+async function setupStartup(logFile) {
+  const configData = await getConfig();
+  if (!configData.config.options.runOnStartup) return;
+
+  try {
+    await startupManager.setupStartup();
+  } catch (err) {
+    console.error("❌ Failed to register PullMate for startup:", err.message);
+    logger.error("Startup registration failed", err);
+  }
+}
+
+// ----------- Pull function ------------
+async function pullAllRepos(config, logFile) {
+  if (!config.repos || config.repos.length === 0) {
+    console.log("⚠️ No repos configured. Use pullmate edit to configure.");
+    logger.warn("No repos configured");
+    return;
+  }
+
+  console.log("⏳ Pulling repos...");
+  logger.info("Starting repo pull operation...");
+
+  const results = config.repos.map((repoPath) => pullRepo(repoPath));
+  const summary = { updated: 0, warnings: 0, failed: 0, upToDate: 0 };
+
+  results.forEach((r) => {
+    const status = r.status || "";
+    
+    // Log detailed information for each repo using structured logging
+    logger.logRepoOperation('pull', r);
+    
+    // Update summary counts
+    if (status.startsWith("✅") && status.includes("updated")) {
+      summary.updated++;
+    } else if (status.startsWith("✅") && status.includes("up-to-date")) {
+      summary.upToDate++;
+    } else if (status.startsWith("⚠️")) {
+      summary.warnings++;
+    } else if (status.startsWith("❌")) {
+      summary.failed++;
+    }
+    
+    // Console output for user
+    console.log(`${status} ${r.repoName} (${r.branch || 'unknown branch'})`);
+  });
+
+  const summaryText = `✅ ${summary.updated} updated | 🔄 ${summary.upToDate} up-to-date | ⚠️ ${summary.warnings} warnings | ❌ ${summary.failed} failed`;
+  console.log(`\nSummary:\n${summaryText}`);
+  logger.logSummary(summary);
+}
+
+// ----------- OS-level schedule setup ------------
+function setupSchedules(config, logFile) {
+  try {
+    scheduler.setupSchedules(config, config.schedules);
+    console.log("⏰ OS-level schedules set up for:", JSON.stringify(config.schedules, null, 2));
+  } catch (error) {
+    console.error("❌ Failed to set up schedules:", error.message);
+    logger.error("Schedule setup failed", error);
+  }
+}
+
+// ----------- Main CLI flow ------------
+async function main() {
+  try {
+    const arg = process.argv[2];
+    await initConfig();
+    const { config } = await getConfig();
+    const logFile = config.options.logFile || path.join(os.homedir(), ".pullmate", "logs.txt");
+
+    // Initialize modules
+    initializeModules(config);
+
+    logger.logStartup('CLI');
+
+    if (arg === "edit") {
+      await editConfig();
+      logger.info("Configuration edited");
+      return;
+    }
+
+    await setupStartup(logFile);
+
+    if (config.options.runOnStartup) {
+      await pullAllRepos(config, logFile);
+    }
+
+    if (config.options.autoFetch && config.schedules) {
+      setupSchedules(config, logFile);
+    }
+
+    console.log("✅ PullMate setup complete. Exiting CLI.");
+    logger.info("CLI execution complete. Exiting.\n");
+  } catch (error) {
+    console.error("❌ PullMate encountered an error:", error.message);
+    if (logger) {
+      logger.error("CLI execution failed", error);
+    }
+    process.exit(1);
+  }
+}
+
+// Run CLI
+main().catch((err) => {
+  console.error("❌ PullMate encountered an error:", err);
+  process.exit(1);
+});
