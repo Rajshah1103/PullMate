@@ -1,0 +1,44 @@
+# Development files
+tests/
+scripts/test*
+scripts/pre-publish.js
+.github/
+docker-compose.yml
+Dockerfile
+.dockerignore
+VERSIONING.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and temp files
+*.log
+.tmp/
+coverage/
+.nyc_output/
+
+# Git
+.git/
+.gitignore
+
+# Development dependencies
+node_modules/
+npm-debug.log*
+
+# Test artifacts
+.pullmate-test/
+
+# Local config (don't include user configs)
+.pullmaterc.json
+.pullmate/
+
+# ESLint and Prettier configs
+.eslintrc.json
+.prettierrc.json
