@@ -21,7 +21,7 @@
     "prepare": "husky install || true",
     "prepublishOnly": "node scripts/pre-publish.js",
     "version:patch": "npm version patch && git push origin main --tags",
-    "version:minor": "npm version minor && git push origin main --tags", 
+    "version:minor": "npm version minor && git push origin main --tags",
     "version:major": "npm version major && git push origin main --tags",
     "publish:patch": "npm run prepublishOnly && npm version patch && npm publish && git push origin main --tags",
     "publish:minor": "npm run prepublishOnly && npm version minor && npm publish && git push origin main --tags",
@@ -29,12 +29,12 @@
     "publish:beta": "npm run prepublishOnly && npm version prerelease --preid=beta && npm publish --tag beta && git push origin main --tags"
   },
   "bin": {
-    "pullmate": "./bin/index.js"
+    "pullmate": "bin/index.js"
   },
   "keywords": [
     "git",
     "automation",
-    "pull", 
+    "pull",
     "repository",
     "scheduler",
     "cli",
