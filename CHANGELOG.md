@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2025-11-16
+
+### Fixed
+- 🐛 **README improvements**: Fixed broken GitHub Actions CI badge
+- 🔗 **Repository links**: Corrected all GitHub repository references from grayquest-finance to Rajshah1103/PullMate
+- 📋 **Badges**: Replaced broken CI badge with working GitHub issues and stars badges
+
+### Added
+- 🐳 **Docker Hub support**: Published official Docker image at `rajshah1103/pullmate:latest`
+- 📖 **Enhanced Docker documentation**: Comprehensive Docker usage examples with volume mounts
+- 🚀 **Docker installation guide**: Added Docker option to Quick Start section
+- ⚙️ **Docker Compose examples**: Added configuration for scheduled runs
+- 🌐 **Docker environment variables**: Documented container-specific settings
+
+### Changed
+- 🐳 **Dockerfile**: Updated ENTRYPOINT for proper argument handling
+- 📚 **Documentation structure**: Improved README organization with clearer Docker sections
+
 ## [1.0.0] - 2025-11-16
 
 ### Added

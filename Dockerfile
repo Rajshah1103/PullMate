@@ -42,4 +42,4 @@ ENTRYPOINT ["node", "src/cli.js"]
 # Labels for metadata
 LABEL maintainer="Raj Shah"
 LABEL description="PullMate - Automatically pull your git repositories"
-LABEL version="1.0.0"
+LABEL version="1.0.1"
