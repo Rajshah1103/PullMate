@@ -1,6 +1,6 @@
 # 🚀 PullMate
 
-[![npm version](https://badge.fury.io/js/pullmate.svg)](https://badge.fury.io/js/pullmate)
+[![npm version](https://img.shields.io/npm/v/pullmate.svg)](https://www.npmjs.com/package/pullmate)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub issues](https://img.shields.io/github/issues/Rajshah1103/PullMate.svg)](https://github.com/Rajshah1103/PullMate/issues)
 [![GitHub stars](https://img.shields.io/github/stars/Rajshah1103/PullMate.svg)](https://github.com/Rajshah1103/PullMate/stargazers)
