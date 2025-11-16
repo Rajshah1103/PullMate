@@ -336,7 +336,18 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📊 Changelog
 
-### v1.0.0 (Latest)
+### v1.0.2 (Latest)
+- ⚡ **Performance optimization**: 50% reduction in git network calls
+- 🔧 **Improved git operations**: Eliminated redundant fetching with fetch + merge approach
+- 📊 **Better logging**: Separate FETCH and MERGE outputs for clearer debugging
+- 🎯 **Enhanced error handling**: Distinct error reporting for different operation failures
+
+### v1.0.1
+- 🐛 **Documentation fixes**: Fixed broken GitHub badges and repository links
+- 🐳 **Docker Hub support**: Published official Docker image
+- 📖 **Enhanced Docker documentation**: Comprehensive usage examples and Docker Compose configs
+
+### v1.0.0
 - 🏗️ Production-grade modular architecture
 - 🐳 Docker containerization support  
 - ✅ Smart "Already up to date" detection
