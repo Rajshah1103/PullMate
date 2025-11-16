@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2025-11-16
+
+### Changed
+- ⚡ **Performance optimization**: Eliminated redundant git fetching operations
+- 🔧 **Git operations**: Replaced `git pull` with `git fetch + git merge` for better efficiency
+- 📊 **Improved logging**: Separate FETCH and MERGE operation outputs for clearer debugging
+- 🎯 **Better error handling**: Distinct error reporting for fetch vs merge failures
+
+### Performance
+- 🚀 **50% reduction** in git network calls per repository
+- ⏱️ **Faster execution** when managing multiple repositories
+- 🌐 **Maintains comprehensive sync**: Still fetches all branches, tags, and prunes dead references
+
 ## [1.0.1] - 2025-11-16
 
 ### Fixed
