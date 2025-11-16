@@ -37,9 +37,9 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD node -e "console.log('PullMate is healthy')" || exit 1
 
 # Default command
-CMD ["node", "src/cli.js"]
+ENTRYPOINT ["node", "src/cli.js"]
 
 # Labels for metadata
 LABEL maintainer="Raj Shah"
 LABEL description="PullMate - Automatically pull your git repositories"
-LABEL version="1.1.0"
+LABEL version="1.0.0"

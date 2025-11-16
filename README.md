@@ -2,7 +2,8 @@
 
 [![npm version](https://badge.fury.io/js/pullmate.svg)](https://badge.fury.io/js/pullmate)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js CI](https://github.com/Rajshah1103/PullMate/workflows/Node.js%20CI/badge.svg)](https://github.com/Rajshah1103/PullMate/actions)
+[![GitHub issues](https://img.shields.io/github/issues/Rajshah1103/PullMate.svg)](https://github.com/Rajshah1103/PullMate/issues)
+[![GitHub stars](https://img.shields.io/github/stars/Rajshah1103/PullMate.svg)](https://github.com/Rajshah1103/PullMate/stargazers)
 
 > Automatically pull your git repositories every morning or on laptop startup ☕
 
@@ -34,11 +35,18 @@ npx pullmate
 
 ### Docker Installation
 ```bash
-docker pull pullmate/pullmate
+# Option 1: Pull from Docker Hub (once published)
+docker pull rajshah1103/pullmate:latest
+
+# Option 2: Build from source
+git clone https://github.com/Rajshah1103/PullMate.git
+cd PullMate
+docker build -t pullmate .
 ```
 
 ## 🚀 Quick Start
 
+### NPM Installation
 1. **Install PullMate globally:**
    ```bash
    npm install -g pullmate
@@ -48,15 +56,26 @@ docker pull pullmate/pullmate
    ```bash
    pullmate edit
    ```
-   This opens a configuration interface where you can:
-   - Add repository paths
-   - Enable/disable startup pulls
-   - Set up schedules
-   - Configure logging options
 
 3. **Run PullMate:**
    ```bash
    pullmate
+   ```
+
+### Docker Installation
+1. **Pull and run with Docker:**
+   ```bash
+   # Pull the image
+   docker pull rajshah1103/pullmate:latest
+   
+   # Create config (one-time setup)
+   docker run -it -v ~/.pullmaterc.json:/home/pullmate/.pullmaterc.json rajshah1103/pullmate:latest edit
+   
+   # Run PullMate
+   docker run --rm \
+     -v /path/to/your/repos:/repos \
+     -v ~/.pullmaterc.json:/home/pullmate/.pullmaterc.json \
+     rajshah1103/pullmate:latest
    ```
 
 ## ⚙️ Configuration
@@ -107,37 +126,63 @@ Schedules use 24-hour format (HH:MM):
 
 ## 🐳 Docker Usage
 
-### Pull and Run
+### Option 1: Use Published Image
 ```bash
-# Pull the image
-docker pull pullmate/pullmate
+# Pull the official image
+docker pull rajshah1103/pullmate:latest
+
+# Run with mounted repositories and config
+docker run --rm \
+  -v /path/to/your/repos:/repos \
+  -v ~/.pullmaterc.json:/home/pullmate/.pullmaterc.json \
+  -v ~/.pullmate:/home/pullmate/.pullmate \
+  rajshah1103/pullmate:latest
+
+# Run interactively to configure
+docker run -it \
+  -v ~/.pullmaterc.json:/home/pullmate/.pullmaterc.json \
+  rajshah1103/pullmate:latest edit
+```
+
+### Option 2: Build from Source
+```bash
+# Clone and build
+git clone https://github.com/Rajshah1103/PullMate.git
+cd PullMate
+docker build -t pullmate .
 
 # Run with mounted repositories
-docker run -v /path/to/your/repos:/repos -v ~/.pullmaterc.json:/root/.pullmaterc.json pullmate/pullmate
+docker run --rm \
+  -v /path/to/your/repos:/repos \
+  -v ~/.pullmaterc.json:/home/pullmate/.pullmaterc.json \
+  pullmate
 ```
 
-### Build from Source
-```bash
-git clone https://github.com/Rajshah1103/PullMate.git
-cd pullmate
-docker build -t pullmate .
-docker run -v /path/to/repos:/repos pullmate
-```
-
-### Docker Compose
+### Docker Compose (Scheduled Runs)
 ```yaml
 version: '3.8'
 services:
   pullmate:
-    image: pullmate/pullmate
+    image: rajshah1103/pullmate:latest
+    # OR for local build: build: .
     volumes:
       - /path/to/your/repos:/repos
-      - ~/.pullmaterc.json:/root/.pullmaterc.json
-      - ~/.pullmate:/root/.pullmate
+      - ~/.pullmaterc.json:/home/pullmate/.pullmaterc.json
+      - ~/.pullmate:/home/pullmate/.pullmate
     environment:
       - TZ=America/New_York
     restart: unless-stopped
+    # Run every 6 hours
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 21600s  # 6 hours
 ```
+
+### Docker Environment Variables
+- `NODE_ENV`: Set to `production` (default in container)
+- `TZ`: Set your timezone for proper scheduling
+- `HOME`: User home directory (set to `/home/pullmate` in container)
 
 ## 📋 Commands
 
@@ -213,8 +258,8 @@ Logs are automatically managed and rotated to prevent excessive disk usage.
 ### Setup
 ```bash
 # Clone the repository
-git clone https://github.com/grayquest-finance/pullmate.git
-cd pullmate
+git clone https://github.com/Rajshah1103/PullMate.git
+cd PullMate
 
 # Install dependencies
 npm install
@@ -231,7 +276,7 @@ npm run build
 
 ### Project Structure
 ```
-pullmate/
+PullMate/
 ├── bin/
 │   └── index.js          # CLI entry point
 ├── src/
@@ -300,12 +345,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 🧪 Complete testing framework
 - 📦 Automated publishing workflow
 - 🌐 Cross-platform support (macOS, Linux, Windows)
-
-### v1.0.0
-- 🎉 Initial release
-- 🔄 Basic auto-pull functionality
-- ⏰ Schedule support
-- 🔔 Desktop notifications
 
 ## 🙏 Acknowledgments
 
