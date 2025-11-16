@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  pullmate:
+    build: .
+    image: pullmate:latest
+    container_name: pullmate
+    volumes:
+      # Mount your repositories directory
+      - ${REPOS_PATH:-/path/to/your/repos}:/repos:ro
+      # Mount config directory
+      - ${HOME}/.pullmate:/home/pullmate/.pullmate
+      # Mount config file
+      - ${HOME}/.pullmaterc.json:/home/pullmate/.pullmaterc.json:ro
+      # Mount SSH keys for git authentication
+      - ${HOME}/.ssh:/home/pullmate/.ssh:ro
+    environment:
+      - TZ=${TZ:-UTC}
+      - NODE_ENV=production
+    restart: unless-stopped
+    networks:
+      - pullmate-network
+    # Run on a schedule using cron-like syntax
+    # Uncomment and modify if you want container-level scheduling
+    # deploy:
+    #   restart_policy:
+    #     condition: on-failure
+    #     delay: 5s
+    #     max_attempts: 3
+
+  # Optional: Watchtower for automatic updates
+  watchtower:
+    image: containrrr/watchtower
+    container_name: pullmate-watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_POLL_INTERVAL=86400  # Check daily
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_INCLUDE_STOPPED=true
+    restart: unless-stopped
+    networks:
+      - pullmate-network
+
+networks:
+  pullmate-network:
+    driver: bridge
+
+# Example usage:
+# 1. Copy this file to your system
+# 2. Create a .env file with:
+#    REPOS_PATH=/path/to/your/repositories
+#    TZ=America/New_York
+# 3. Run: docker-compose up -d
