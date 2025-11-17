@@ -1,6 +1,6 @@
 {
   "name": "pullmate",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "🚀 Automated Git repository management tool with scheduling, notifications, and cross-platform support",
   "main": "src/cli.js",
   "type": "module",
