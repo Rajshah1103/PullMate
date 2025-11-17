@@ -365,7 +365,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📊 Changelog
 
-### v1.0.4 (Latest)
+### v1.0.5 (Latest)
+- 🔧 **README fix**: Cleaned up corrupted header badges section
+- 📝 **Documentation cleanup**: Proper formatting and badge display
+
+### v1.0.4
 - ✅ **Fixed CLI commands**: Added proper `--help` and `--version` support with correct flags (`-h`, `-v`)
 - 📝 **Documentation accuracy fixes**: 
   - ✨ **Schedule flexibility**: Clarified that ANY custom schedule names are supported (not just "morning"/"evening")
