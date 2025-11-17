@@ -100,10 +100,47 @@ function setupSchedules(config, logFile) {
   }
 }
 
+// ----------- Command handlers ------------
+function showHelp() {
+  console.log(`
+🚀 PullMate - Automated Git Repository Manager
+
+Usage:
+  pullmate             Run PullMate with current configuration
+  pullmate edit        Open configuration editor  
+  pullmate --help      Show this help information
+  pullmate --version   Show version information
+
+Examples:
+  pullmate            # Pull all configured repos
+  pullmate edit       # Configure repositories and schedules
+
+For more information, visit: https://github.com/Rajshah1103/PullMate
+`);
+}
+
+function showVersion() {
+  const packageJsonPath = path.join(path.dirname(new URL(import.meta.url).pathname), '..', 'package.json');
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+  console.log(`PullMate v${packageJson.version}`);
+}
+
 // ----------- Main CLI flow ------------
 async function main() {
   try {
     const arg = process.argv[2];
+    
+    // Handle commands that don't need config
+    if (arg === "--help" || arg === "-h") {
+      showHelp();
+      return;
+    }
+    
+    if (arg === "--version" || arg === "-v") {
+      showVersion();
+      return;
+    }
+
     await initConfig();
     const { config } = await getConfig();
     const logFile = config.options.logFile || path.join(os.homedir(), ".pullmate", "logs.txt");

@@ -3,7 +3,12 @@
 [![npm version](https://img.shields.io/npm/v/pullmate.svg)](https://www.npmjs.com/package/pullmate)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub issues](https://img.shields.io/github/issues/Rajshah1103/PullMate.svg)](https://github.com/Rajshah1103/PullMate/issues)
-[![GitHub stars](https://img.shields.io/github/stars/Rajshah1103/PullMate.svg)](https://github.com/Rajshah1103/PullMate/stargazers)
+[![GitHub star### v1.0.4 (Latest)
+- ✅ **Fixed CLI commands**: Added proper `--help` and `--version` support with correct flags (`-h`, `-v`)
+- 📝 **Documentation accuracy fixes**: 
+  - ✨ **Schedule flexibility**: Clarified that ANY custom schedule names are supported (not just "morning"/"evening")
+  - 📊 **Log rotation details**: Detailed Winston-based rotation with file size limits and archive counts
+- 🔧 **CLI improvements**: Better help text and version detection from package.jsons://img.shields.io/github/stars/Rajshah1103/PullMate.svg)](https://github.com/Rajshah1103/PullMate/stargazers)
 
 > Automatically pull your git repositories every morning or on laptop startup ☕
 
@@ -12,8 +17,8 @@ PullMate is a cross-platform CLI tool that automatically keeps your git reposito
 ## ✨ Features
 
 - 🔄 **Auto-pull on startup**: Automatically pull all configured repositories when your system starts
-- ⏰ **Scheduled pulls**: Set up custom schedules (morning, evening, or any time you want)
-- 📊 **Detailed logging**: Complete operation logs with timestamps, branch info, and status
+- ⏰ **Scheduled pulls**: Set up custom schedules with any names you want (morning, workday, hourly, etc.)
+- 📊 **Detailed logging**: Complete operation logs with timestamps, branch info, and automatic rotation
 - 🔔 **Desktop notifications**: Get notified when repositories are updated or encounter issues
 - 🛡️ **Safe operations**: Only fast-forward pulls, warns about uncommitted changes and merge conflicts
 - 🌐 **Cross-platform**: Works on macOS, Linux, and Windows
@@ -95,8 +100,8 @@ PullMate stores its configuration in `~/.pullmaterc.json`. Here's an example:
     "logFile": "~/.pullmate/logs.txt"
   },
   "schedules": {
-    "morning": ["09:00", "12:00"],
-    "evening": ["18:00", "21:00"]
+    "morning": "09:00",
+    "evening": "18:00"
   }
 }
 ```
@@ -109,20 +114,30 @@ PullMate stores its configuration in `~/.pullmaterc.json`. Here's an example:
 | `runOnStartup` | Boolean | Pull repositories on system startup | `true` |
 | `autoFetch` | Boolean | Enable scheduled pulls | `true` |
 | `logFile` | String | Path to log file | `~/.pullmate/logs.txt` |
-| `schedules` | Object | Scheduled pull times | `{}` |
+| `schedules` | Object | Custom named schedules with times (any names allowed) | `{}` |
+
+**Important:** Schedule names are completely flexible - use any names you prefer!
 
 ### Schedule Format
 
-Schedules use 24-hour format (HH:MM):
+Schedules use 24-hour format (HH:MM) and support **any custom schedule names** - you're not limited to "morning" and "evening":
 ```json
 {
   "schedules": {
-    "morning": "09:00",           // Single time
-    "workday": ["09:00", "17:00"], // Multiple times
-    "frequent": ["10:00", "14:00", "18:00"] // Multiple times
+    "morning": "09:00",                    // Single time
+    "lunch": "13:00",                      // Any custom name
+    "afternoon": "14:00",                  // Any custom name  
+    "evening": ["18:00", "21:00"],         // Multiple times  
+    "workday": ["09:00", "12:00", "17:00"], // Multiple times
+    "hourly": ["10:00", "11:00", "12:00", "13:00", "14:00"] // Many times
   }
 }
 ```
+
+**Key Points:**
+- ✅ **Flexible naming**: Use any schedule names you want (`work`, `break`, `sync`, etc.)
+- ✅ **Single or multiple times**: Each schedule can have one time `"09:00"` or multiple `["09:00", "17:00"]`
+- ✅ **Cross-platform**: Works on macOS (launchd), Linux (cron), and Windows (Task Scheduler)
 
 ## 🐳 Docker Usage
 
@@ -190,8 +205,8 @@ services:
 |---------|-------------|
 | `pullmate` | Run PullMate with current configuration |
 | `pullmate edit` | Open configuration editor |
-| `pullmate --help` | Show help information |
-| `pullmate --version` | Show version information |
+| `pullmate --help` or `-h` | Show help information |
+| `pullmate --version` or `-v` | Show version information |
 
 ## 📊 Status Indicators
 
@@ -245,8 +260,27 @@ PULL: Already up to date.
 ---
 ```
 
-### Log Rotation
-Logs are automatically managed and rotated to prevent excessive disk usage.
+### Log Management & Rotation
+PullMate uses **Winston logging library** with automatic rotation:
+
+**📁 Log Files:**
+- **Main logs**: `~/.pullmate/logs.txt` (operations, status, summaries)
+- **Exception logs**: `~/.pullmate/exceptions.log` (crashes)  
+- **Rejection logs**: `~/.pullmate/rejections.log` (promise rejections)
+
+**🔄 Auto-Rotation:**
+- **File Size Limit**: 10MB per log file
+- **Archive Count**: Up to 5 rotated files (logs.txt.1, logs.txt.2, etc.)
+- **Auto-cleanup**: Old logs automatically deleted to prevent disk bloat
+- **Tailable**: New logs append to current file, old content archived
+
+**📊 Log Retention:**
+```bash
+~/.pullmate/logs.txt      # Current logs (up to 10MB)
+~/.pullmate/logs.txt.1    # Previous rotation  
+~/.pullmate/logs.txt.2    # Older rotation
+# ... up to logs.txt.5
+```
 
 ## 🛠️ Development
 
@@ -336,7 +370,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📊 Changelog
 
-### v1.0.3 (Latest)
+### v1.0.4 (Latest)
+- ✅ **Fixed CLI commands**: Added proper `--help` and `--version` support with correct flags (`-h`, `-v`)
+- 📝 **Documentation accuracy fixes**: 
+  - ✨ **Schedule flexibility**: Clarified that ANY custom schedule names are supported (not just "morning"/"evening")
+  - � **Log rotation details**: Detailed Winston-based rotation with file size limits and archive counts
+  - 🎯 **Technical precision**: Updated all README content to match actual implementation capabilities
+- 🔧 **CLI improvements**: Better help text and version detection from package.json
+
+### v1.0.3
 - 📊 **Badge improvements**: Updated npm version badge to use shields.io for faster updates
 - 🔧 **Documentation**: Better badge caching and reliability
 
