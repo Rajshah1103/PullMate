@@ -3,12 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/pullmate.svg)](https://www.npmjs.com/package/pullmate)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub issues](https://img.shields.io/github/issues/Rajshah1103/PullMate.svg)](https://github.com/Rajshah1103/PullMate/issues)
-[![GitHub star### v1.0.4 (Latest)
-- ✅ **Fixed CLI commands**: Added proper `--help` and `--version` support with correct flags (`-h`, `-v`)
-- 📝 **Documentation accuracy fixes**: 
-  - ✨ **Schedule flexibility**: Clarified that ANY custom schedule names are supported (not just "morning"/"evening")
-  - 📊 **Log rotation details**: Detailed Winston-based rotation with file size limits and archive counts
-- 🔧 **CLI improvements**: Better help text and version detection from package.jsons://img.shields.io/github/stars/Rajshah1103/PullMate.svg)](https://github.com/Rajshah1103/PullMate/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/Rajshah1103/PullMate.svg)](https://github.com/Rajshah1103/PullMate/stargazers)
 
 > Automatically pull your git repositories every morning or on laptop startup ☕
 
