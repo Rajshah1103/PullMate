@@ -12,13 +12,15 @@ PullMate is a cross-platform CLI tool that automatically keeps your git reposito
 ## ✨ Features
 
 - 🔄 **Auto-pull on startup**: Automatically pull all configured repositories when your system starts
+- 🌿 **All-branch sync**: Updates ALL local branches with their remote counterparts (v1.1.0+)
 - ⏰ **Scheduled pulls**: Set up custom schedules with any names you want (morning, workday, hourly, etc.)
+- 🎯 **Smart status detection**: Accurate reporting of what actually got updated vs what was already current
 - 📊 **Detailed logging**: Complete operation logs with timestamps, branch info, and automatic rotation
 - 🔔 **Desktop notifications**: Get notified when repositories are updated or encounter issues
 - 🛡️ **Safe operations**: Only fast-forward pulls, warns about uncommitted changes and merge conflicts
 - 🌐 **Cross-platform**: Works on macOS, Linux, and Windows
 - 📁 **Multi-repo support**: Manage multiple repositories from a single configuration
-- 🎯 **Smart detection**: Automatically detects "Already up to date" status and actual updates
+- 🧠 **Intelligent updates**: No more false "updated" reports - only shows updates when commits actually change
 
 ## 📦 Installation
 
@@ -208,11 +210,20 @@ services:
 PullMate provides clear status indicators for each repository:
 
 - ✅ **up-to-date**: Repository is current, no changes pulled
-- ✅ **updated**: New commits were pulled successfully
+- ✅ **updated**: New commits were pulled successfully (current branch or other branches)
 - ⚠️ **dirty**: Repository has uncommitted changes
 - ⚠️ **diverged**: Local branch has diverged from remote
 - ❌ **failed**: Operation failed (network issues, etc.)
 - ❌ **not-a-git-repo**: Directory is not a git repository
+
+### 🌿 Branch Status (v1.1.0+)
+PullMate now shows detailed information about other branches:
+```bash
+✅ updated my-repo (main) + 3 other branch(es) updated
+✅ up-to-date my-repo (dev) + 2 other branch(es) up-to-date
+```
+
+This means even if your current branch is up-to-date, you'll know if other local branches (like `master`, `develop`, etc.) were updated with new commits from their remotes.
 
 ## 🔧 Platform-Specific Setup
 
@@ -365,42 +376,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📊 Changelog
 
-### v1.0.5 (Latest)
-- 🔧 **README fix**: Cleaned up corrupted header badges section
-- 📝 **Documentation cleanup**: Proper formatting and badge display
+For detailed version history, see [CHANGELOG.md](./CHANGELOG.md).
 
-### v1.0.4
-- ✅ **Fixed CLI commands**: Added proper `--help` and `--version` support with correct flags (`-h`, `-v`)
-- 📝 **Documentation accuracy fixes**: 
-  - ✨ **Schedule flexibility**: Clarified that ANY custom schedule names are supported (not just "morning"/"evening")
-  - � **Log rotation details**: Detailed Winston-based rotation with file size limits and archive counts
-  - 🎯 **Technical precision**: Updated all README content to match actual implementation capabilities
-- 🔧 **CLI improvements**: Better help text and version detection from package.json
+### Latest Release: v1.1.0
+- 🌿 **All-branch synchronization**: Updates ALL local branches with their remote counterparts
+- 🎯 **Smart status detection**: Accurate "updated" vs "up-to-date" reporting
+- 🧠 **Intelligent commit comparison**: No more false "updated" reports
+- � **Clean CLI output**: Streamlined console display with better formatting
+- 📊 **Enhanced branch reporting**: Shows which other branches were updated
 
-### v1.0.3
-- 📊 **Badge improvements**: Updated npm version badge to use shields.io for faster updates
-- 🔧 **Documentation**: Better badge caching and reliability
-
-### v1.0.2
-- ⚡ **Performance optimization**: 50% reduction in git network calls
-- 🔧 **Improved git operations**: Eliminated redundant fetching with fetch + merge approach
-- 📊 **Better logging**: Separate FETCH and MERGE outputs for clearer debugging
-- 🎯 **Enhanced error handling**: Distinct error reporting for different operation failures
-
-### v1.0.1
-- 🐛 **Documentation fixes**: Fixed broken GitHub badges and repository links
-- 🐳 **Docker Hub support**: Published official Docker image
-- 📖 **Enhanced Docker documentation**: Comprehensive usage examples and Docker Compose configs
-
-### v1.0.0
-- 🏗️ Production-grade modular architecture
-- 🐳 Docker containerization support  
-- ✅ Smart "Already up to date" detection
-- 📊 Enhanced logging with detailed repository information
-- 🎯 Comprehensive status categorization
-- 🧪 Complete testing framework
-- 📦 Automated publishing workflow
-- 🌐 Cross-platform support (macOS, Linux, Windows)
+[View Full Changelog →](./CHANGELOG.md)
 
 ## 🙏 Acknowledgments
 

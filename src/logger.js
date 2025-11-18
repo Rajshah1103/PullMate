@@ -47,8 +47,8 @@ class Logger {
       ]
     });
 
-    // Add console transport in development or if DEBUG is set
-    if (process.env.NODE_ENV !== 'production' || process.env.DEBUG) {
+    // Add console transport only in development or if DEBUG is set
+    if (process.env.NODE_ENV === 'development' && process.env.DEBUG) {
       this.logger.add(new winston.transports.Console({
         format: winston.format.combine(
           winston.format.colorize(),

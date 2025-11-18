@@ -63,10 +63,12 @@ async function pullAllRepos(config, logFile) {
   const results = config.repos.map((repoPath) => pullRepo(repoPath));
   const summary = { updated: 0, warnings: 0, failed: 0, upToDate: 0 };
 
+  console.log(); // Empty line for better spacing
+
   results.forEach((r) => {
     const status = r.status || "";
     
-    // Log detailed information for each repo using structured logging
+    // Log detailed information for each repo (but not to console)
     logger.logRepoOperation('pull', r);
     
     // Update summary counts
@@ -80,12 +82,33 @@ async function pullAllRepos(config, logFile) {
       summary.failed++;
     }
     
-    // Console output for user
-    console.log(`${status} ${r.repoName} (${r.branch || 'unknown branch'})`);
+    // Clean console output - just the essential info
+    const repoDisplayName = r.repoName || path.basename(r.repoPath);
+    const branchInfo = r.branch ? ` (${r.branch})` : '';
+    
+    // Show branch updates summary if any
+    let branchUpdateInfo = '';
+    if (r.branchUpdates && r.branchUpdates.length > 0) {
+      const otherUpdates = r.branchUpdates.filter(u => u.status === 'updated' && !u.isCurrent);
+      const otherUpToDate = r.branchUpdates.filter(u => u.status === 'up-to-date' && !u.isCurrent);
+      const totalOthers = otherUpdates.length + otherUpToDate.length;
+      
+      if (totalOthers > 0) {
+        if (otherUpdates.length > 0 && otherUpToDate.length > 0) {
+          branchUpdateInfo = ` + ${otherUpdates.length} updated, ${otherUpToDate.length} up-to-date`;
+        } else if (otherUpdates.length > 0) {
+          branchUpdateInfo = ` + ${otherUpdates.length} other branch(es) updated`;
+        } else if (otherUpToDate.length > 0) {
+          branchUpdateInfo = ` + ${otherUpToDate.length} other branch(es) up-to-date`;
+        }
+      }
+    }
+    
+    console.log(`${status} ${repoDisplayName}${branchInfo}${branchUpdateInfo}`);
   });
 
   const summaryText = `✅ ${summary.updated} updated | 🔄 ${summary.upToDate} up-to-date | ⚠️ ${summary.warnings} warnings | ❌ ${summary.failed} failed`;
-  console.log(`\nSummary:\n${summaryText}`);
+  console.log(`\n📊 Summary: ${summaryText}`);
   logger.logSummary(summary);
 }
 
