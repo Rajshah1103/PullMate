@@ -7,6 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-04-29
+
+### Added
+- `pullmate init` interactive setup wizard: scans common directories for git repos, guides schedule and option configuration
+- `pullmate doctor` health check: validates config, repo paths, remotes, OS scheduling entries, and log directory
+- `pullmate add <path> [--group <name>]` command to add repos without editing JSON
+- `pullmate remove <path>` command to remove repos without editing JSON
+- `pullmate list` command to view all configured repositories and their groups
+- `pullmate status [path]` command to check repo state (commits behind/ahead, dirty, diverged) without pulling
+- `pullmate logs [--tail] [--errors] [-n <lines>]` command to view sync logs in the terminal
+- `pullmate schedule list/add/remove` commands to manage schedules without editing JSON
+- `--group <name>` flag on the default pull command to sync only a subset of repos
+- Repository groups: repos can be tagged with `{ path, group }` in config
+- Pre/post pull hooks: `options.hooks.beforePull` and `options.hooks.afterPull` (also per-repo)
+- Improved dirty repo messaging: skipped repos now show "stash or commit to sync" hint
+
+### Changed
+- CLI refactored to use `commander` for proper subcommand and flag parsing
+- `--help` and `--version` flags now handled by commander (`-h`, `-v`)
+- `pullRepo` now accepts an optional `{ hooks }` argument
+- `saveConfig` is now silent by default for internal calls
+- `initConfig` no longer prints a warning when config already exists
+
+## [1.2.0] - 2026-04-29
+
+### Added
+- Core config management helpers: `getRepoPath`, `getRepoGroup`, `addRepo`, `removeRepo`, `addSchedule`, `removeSchedule`
+- `getRepoStatus` for read-only repo inspection without pulling
+- Hook execution support in `pullRepo` (`beforePull`, `afterPull`)
+
+### Changed
+- `runGitCommand` now uses `stdio: 'pipe'` to suppress git stderr noise
+- Dirty repo status message updated to include actionable hint
+
 ## [1.1.0] - 2025-11-18
 
 ### 🚀 Major Features
